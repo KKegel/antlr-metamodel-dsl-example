@@ -6,6 +6,8 @@ The language implemented here is called **KMeta**. It is a *metamodeling languag
 
 The project reads `.kmeta` files, parses them, and produces an in-memory **metamodel** object that downstream code can use to validate, generate, or interpret instance data.
 
+> This template project is a decoupled and modified snippet of the [karpfen project language module](https://github.com/karpfenproject) 🐟
+
 ---
 
 ## Package structure
