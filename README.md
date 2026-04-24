@@ -2,11 +2,17 @@
 
 This project is a starter template that shows how to build a textual **domain-specific language (DSL)** on the JVM using [ANTLR4](https://www.antlr.org/) and Kotlin.
 
+**This project defines no Main class!** If this library module shall be used as a standalone application, a main class (and gradle application plugin) must be added. However, adhering to a good software design, a module like this one shall be compiled and included as a library into a custom application. **You can still observe runtime obhaviour via the provided tests.**
+
 The language implemented here is called **KMeta**. It is a *metamodeling language* — a language for describing the structure of data. Think of it like a schema or a class diagram written in plain text. For example, the file `example/cleaning_robot.kmeta` defines the types `Robot`, `Room`, `Obstacle`, etc. and their properties and relationships, without containing any actual robot data.
 
 The project reads `.kmeta` files, parses them, and produces an in-memory **metamodel** object that downstream code can use to validate, generate, or interpret instance data.
 
 > This template project is a decoupled and modified snippet of the [karpfen project language module](https://github.com/karpfenproject) 🐟
+
+---
+
+This project is implemented in Kotlin. However, as Kotlin compiles to Java and produces JAR files, it can be directly imported from a Java application. If you prefer Java instead of Kotlin, this project can directly translated via various tools (for example in you IDE).
 
 ---
 
@@ -42,6 +48,16 @@ The key parts:
 6. **`sourceSets { main { java { srcDirs = ['src/main/java'] } } }`** — tells the Kotlin/Java compiler to look for Java sources in `src/main/java` (where the copies live) rather than in the build directory.
 
 In short: `Kmeta.g4` → ANTLR generates Java → copied to `src/main/java/` → compiled together with the Kotlin sources.
+
+## Basic Gradle commands you can execute
+
+| Command | What it does |
+|---|---|
+| `./gradlew build` | Generates ANTLR sources, compiles Kotlin + Java, and packages the library. |
+| `./gradlew test` | Runs all JUnit tests (the primary way to observe runtime behaviour). |
+| `./gradlew clean` | Deletes the `build/` directory. |
+
+On Windows without a system Gradle installation, use `gradlew.bat` instead of `./gradlew`.
 
 ---
 
