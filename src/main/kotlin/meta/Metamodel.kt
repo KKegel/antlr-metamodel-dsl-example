@@ -16,28 +16,16 @@
 package meta
 
 /**
- * Represents the metamodel structure with class type definitions and root type.
- *
- * @property types List of all class type definitions in the metamodel.
- * @property rootClass The designated root class type for instances.
+ * The root object produced by parsing a .kmeta file.
+ * Holds all ClassType definitions in declaration order and designates one of them as the root
+ * type — the entry point consumers use to navigate the full type graph.
  */
 class Metamodel(val types: MutableList<ClassType>, val rootClass: ClassType) {
 
-    /**
-     * Retrieves a class type by its name.
-     *
-     * @param name The name of the class type to retrieve.
-     * @return The ClassType if found, null otherwise.
-     */
     fun getTypeByName(name: String): ClassType? {
         return types.firstOrNull { it.name == name }
     }
 
-    /**
-     * Returns the set of all class type names in the metamodel.
-     *
-     * @return A set of class type names.
-     */
     fun getClassTypes(): Set<String> {
         return types.map { it.name }.toSet()
     }

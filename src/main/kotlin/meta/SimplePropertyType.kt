@@ -16,7 +16,9 @@
 package meta
 
 /**
- * Enumeration of primitive property types supported in the metamodel.
+ * The three primitive types a SimpleProperty can hold.
+ * They map directly to the type-name strings accepted inside a `prop(...)` DSL rule:
+ * "string", "number", and "boolean".
  */
 enum class SimplePropertyType {
     /** Boolean true/false value */

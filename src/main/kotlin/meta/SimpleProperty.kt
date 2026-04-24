@@ -16,11 +16,9 @@
 package meta
 
 /**
- * Represents a simple (primitive type) property definition in a class type.
- *
- * @property key The name of the property.
- * @property propertyType The primitive type of this property.
- * @property isList True if this property holds a list of values.
+ * A primitive-valued attribute on a ClassType, produced by a `prop(...)` rule in the DSL.
+ * Stores the attribute name, which primitive type it holds (STRING / NUMBER / BOOLEAN), and
+ * whether it is a single value or a list.
  */
 data class SimpleProperty(
     val key: String,

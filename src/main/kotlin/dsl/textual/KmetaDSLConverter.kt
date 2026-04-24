@@ -28,16 +28,13 @@ import parser.StringValue
 import java.io.File
 
 /**
- * Converts KMeta DSL strings and files into Metamodel objects.
+ * Converts the KmetaFile intermediate representation into the final Metamodel object graph.
+ * Maps prop rules to SimpleProperty, has rules to ClassTypeProperty(EMBEDDED), and knows rules
+ * to ClassTypeProperty(LINK). After all types are built a second pass resolves every
+ * ClassTypeReference to the actual ClassType object it names.
  */
 object KmetaDSLConverter {
 
-    /**
-     * Parses a KMeta string and converts it to a Metamodel.
-     *
-     * @param content The KMeta content as a string.
-     * @return The parsed metamodel.
-     */
     fun parseKmetaString(content: String): Metamodel {
         val d = KmetaFileParser().parseString(content.trimIndent())
         val types = d.types
@@ -153,24 +150,11 @@ object KmetaDSLConverter {
         return Metamodel(classTypes, classTypes.last())
     }
 
-    /**
-     * Parses a KMeta file and converts it to a Metamodel.
-     *
-     * @param filePath The path to the KMeta file to parse.
-     * @return The parsed metamodel.
-     */
     fun parseKmetaFile(filePath: String): Metamodel {
         val content = File(filePath).readText()
         return parseKmetaString(content)
     }
 
-    /**
-     * Converts a Metamodel back to a KMeta DSL string.
-     *
-     * @param metamodel The metamodel to convert.
-     * @return The KMeta DSL string representation.
-     * @throws NotImplementedError This operation is not yet implemented.
-     */
     fun convertToKmetaString(metamodel: Metamodel): String {
         throw NotImplementedError()
     }

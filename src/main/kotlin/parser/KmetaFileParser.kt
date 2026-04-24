@@ -21,27 +21,17 @@ import org.antlr.v4.runtime.CommonTokenStream
 import java.io.File
 
 /**
- * Parser for KMeta DSL files using ANTLR-generated parser classes.
+ * Entry point for parsing KMeta text.
+ * Wires up the ANTLR-generated KmetaLexer and KmetaParser around an input string or file
+ * and hands the resulting parse tree to KmetaParseVisitor to produce a KmetaFile.
  */
 class KmetaFileParser {
 
-    /**
-     * Parses a KMeta metamodel from a file.
-     *
-     * @param filePath The path to the KMeta file to parse.
-     * @return The parsed metamodel structure.
-     */
     fun parseFile(filePath: String): KmetaFile {
         val file = File(filePath)
         return parseString(file.readText())
     }
 
-    /**
-     * Parses a KMeta metamodel from a string.
-     *
-     * @param content The KMeta content as a string.
-     * @return The parsed metamodel structure.
-     */
     fun parseString(content: String): KmetaFile {
         val inputStream = CharStreams.fromString(content)
         val lexer = KmetaLexer(inputStream)
@@ -55,6 +45,11 @@ class KmetaFileParser {
     }
 }
 
+/**
+ * Walks the ANTLR parse tree and converts it into the simpler KmetaFile / TypeDefinition
+ * intermediate representation. Extends the generated KmetaBaseVisitor so all ANTLR-specific
+ * types stay confined to this class and do not leak into the rest of the codebase.
+ */
 class KmetaParseVisitor : KmetaBaseVisitor<KmetaFile>() {
     private val typeDefinitions = mutableListOf<TypeDefinition>()
 
@@ -116,8 +111,17 @@ class KmetaParseVisitor : KmetaBaseVisitor<KmetaFile>() {
     }
 }
 
+/**
+ * The top-level result of the KmetaParseVisitor pass: a flat, ANTLR-free list of
+ * TypeDefinitions ready to be mapped to metamodel classes by KmetaDSLConverter.
+ */
 data class KmetaFile(val types: List<TypeDefinition>)
 
+/**
+ * Intermediate representation of one type block extracted from the parse tree.
+ * Accumulates its prop / has / knows rules into separate lists before they are
+ * mapped to SimpleProperty and ClassTypeProperty by KmetaDSLConverter.
+ */
 data class TypeDefinition(
     val name: String,
     val description: String
@@ -139,8 +143,19 @@ data class TypeDefinition(
     }
 }
 
+/**
+ * A single key-value entry collected during the visitor pass, shared by prop, has, and knows
+ * rules. The semantic meaning of the value is determined later by KmetaDSLConverter based on
+ * which list (props / has / knows) this Rule belongs to.
+ */
 data class Rule(val key: String, val value: RuleValue)
 
+/**
+ * Sealed hierarchy representing the two shapes a DSL rule value can take.
+ * StringValue holds a bare quoted string (e.g. "number" or "Robot").
+ * ListValue holds the inner type of a list(...) expression (e.g. list("Obstacle") → "Obstacle").
+ * The distinction is used by KmetaDSLConverter to set the isList flag on properties.
+ */
 sealed class RuleValue
 data class StringValue(val value: String) : RuleValue()
 data class ListValue(val value: String) : RuleValue()

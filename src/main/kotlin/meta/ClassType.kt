@@ -16,12 +16,9 @@
 package meta
 
 /**
- * Represents a class type definition in a metamodel.
- *
- * @property name The name of the class type.
- * @property comment Documentation or description for this class type.
- * @property simpleProperties List of simple (primitive) property definitions.
- * @property objectProperties List of complex object property definitions.
+ * A single type block from a .kmeta file, e.g. `type "Robot" "description" { ... }`.
+ * Acts as the central building block of the metamodel: it groups a type's name, human-readable
+ * description, primitive attributes (SimpleProperty), and object relationships (ClassTypeProperty).
  */
 data class ClassType(
     val name: String,
@@ -30,20 +27,10 @@ data class ClassType(
     val objectProperties: List<ClassTypeProperty>
 ){
 
-    /**
-     * Returns simple properties as a map keyed by property name.
-     *
-     * @return Map of property names to SimpleProperty objects.
-     */
     fun simplePropsAsMap(): Map<String, SimpleProperty> {
         return simpleProperties.associateBy { it.key }
     }
 
-    /**
-     * Returns object properties as a map keyed by property name.
-     *
-     * @return Map of property names to ClassTypeProperty objects.
-     */
     fun objectPropsAsMap(): Map<String, ClassTypeProperty> {
         return objectProperties.associateBy { it.key }
     }

@@ -23,9 +23,10 @@ import meta.Metamodel
 import meta.SimpleProperty
 
 /**
- * Provides a functional DSL builder for constructing Metamodel objects.
- *
- * Allows programmatic creation of metamodels without parsing DSL text.
+ * A fluent builder for constructing a Metamodel directly in Kotlin code, without writing or
+ * parsing any DSL text. Intended for tests and for programmatically assembling metamodels.
+ * Because references are resolved eagerly, each ClassType must be declared with makeClass()
+ * before it is referenced in a relationship.
  */
 class MetamodelBuilder {
 

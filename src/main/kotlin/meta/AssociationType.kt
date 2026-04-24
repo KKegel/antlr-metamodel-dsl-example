@@ -16,11 +16,13 @@
 package meta
 
 /**
- * Enumeration of association types between class types.
+ * Distinguishes two kinds of object relationship between ClassTypes.
+ * EMBEDDED means the referenced object is owned by this type and cannot exist independently
+ * (composition, expressed with `has` in the DSL).
+ * LINK means the referenced object is independent and this type merely holds a pointer to it
+ * (association, expressed with `knows` in the DSL).
  */
 enum class AssociationType {
-    /** Reference link to another object (by ID) */
     LINK,
-    /** Embedded object contained within this object */
     EMBEDDED
 }

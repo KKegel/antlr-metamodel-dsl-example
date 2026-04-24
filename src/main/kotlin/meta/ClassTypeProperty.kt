@@ -16,12 +16,9 @@
 package meta
 
 /**
- * Represents a complex object property definition in a class type.
- *
- * @property key The name of the property.
- * @property reference Reference to the target class type.
- * @property isList True if this property holds a list of objects.
- * @property associationType The type of association (LINK or EMBEDDED).
+ * An object-typed attribute on a ClassType, produced by a `has(...)` or `knows(...)` rule in the DSL.
+ * Unlike SimpleProperty it points to another ClassType via a ClassTypeReference and records
+ * whether the relationship is ownership (EMBEDDED) or a plain reference (LINK).
  */
 data class ClassTypeProperty(
     val key: String,

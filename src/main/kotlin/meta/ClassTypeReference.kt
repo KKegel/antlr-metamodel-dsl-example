@@ -16,11 +16,10 @@
 package meta
 
 /**
- * Represents a reference to another class type in the metamodel.
- *
- * @property associationType The type of association to the referenced class.
- * @property classTypeName The name of the referenced class type.
- * @property classType The resolved ClassType object (populated after parsing).
+ * A two-phase pointer to a target ClassType.
+ * During the first parse pass only the target type name is known; once all types have been
+ * collected, the classType field is resolved to the actual ClassType object. This deferred
+ * resolution allows types to reference each other regardless of declaration order.
  */
 data class ClassTypeReference(
     val associationType: AssociationType,
