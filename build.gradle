@@ -1,0 +1,55 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '2.3.0'
+    id 'antlr'
+}
+
+group = 'de.tud.st'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'lib'
+    }
+}
+
+dependencies {
+    antlr 'org.antlr:antlr4:4.13.1'
+    implementation 'org.antlr:antlr4-runtime:4.13.1'
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
+    implementation fileTree(dir: 'lib', include: ['*.jar'])
+
+}
+
+kotlin {
+    jvmToolchain(21)
+}
+
+test {
+    useJUnitPlatform()
+}
+
+// ANTLR configuration
+generateGrammarSource {
+    maxHeapSize = "64m"
+    arguments += ['-visitor', '-no-listener', '-package', 'kmeta']
+}
+
+// Task to copy generated ANTLR files to src/main/java
+tasks.register('copyAntlrSources', Copy) {
+    dependsOn generateGrammarSource
+    from "${buildDir}/generated-src/antlr/main"
+    into "${projectDir}/src/main/java"
+}
+
+// Configure source sets to only use src/main/java and ignore build/generated-src
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+    }
+}
+
+// Ensure ANTLR runs and files are copied before compilation
+compileTestKotlin.dependsOn generateTestGrammarSource
