@@ -86,6 +86,8 @@ The four rule keywords map directly onto the metamodel concepts described below:
 - `has` — owns and contains another typed object (the child cannot exist independently)
 - `knows` — holds a reference to another typed object (the target exists independently)
 
+**You find the full grammar documentation [here](https://github.com/karpfenproject/karpfen-dsl-tools/blob/3dc2478342a7557830b9821e8885a936b2ad34e9/guides/kmeta_grammar_guide.md).
+
 ---
 
 ## The metamodel AST classes (meta/)
